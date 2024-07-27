@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .btn-primary, .btn-danger {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1.1rem;
+        }
+        .form-control, .form-select {
+            padding: 0.75rem;
+            font-size: 1.1rem;
+        }
+        .alert {
+            margin-top: 1rem;
+        }
+        h2 {
+            margin-top: 2rem;
+        }
+        .list-group-item {
+            font-size: 1.1rem;
+        }
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="dashboard-header">Admin Dashboard</h1>
+        <% if (message) { %>
+            <div class="alert alert-success" role="alert">
+                <%= message %>
+            </div>
+        <% } %>
+        <% if (error) { %>
+            <div class="alert alert-danger" role="alert">
+                <%= error %>
+            </div>
+        <% } %>
+
+        <!-- Add PC Form -->
+        <h2>Add a PC</h2>
+        <form action="/admin/add-pc" method="POST">
+            <div class="form-group">
+                <label for="name">PC Name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select class="form-select" id="status" name="status">
+                    <option value="available">Available</option>
+                    <option value="booked">Booked</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Add PC</button>
+        </form>
+
+        <!-- Remove PC Form -->
+        <h2 class="mt-5">Remove a PC</h2>
+        <form action="/admin/remove-pc" method="POST">
+            <div class="form-group">
+                <label for="pcId">PC ID</label>
+                <input type="number" class="form-control" id="pcId" name="pcId" required>
+            </div>
+            <button type="submit" class="btn btn-danger">Remove PC</button>
+        </form>
+
+        <!-- Delete User Form -->
+        <h2 class="mt-5">Delete a User</h2>
+        <form action="/admin/delete-user" method="POST">
+            <div class="form-group">
+                <label for="userId">User ID</label>
+                <input type="number" class="form-control" id="userId" name="userId" required>
+            </div>
+            <button type="submit" class="btn btn-danger">Delete User</button>
+        </form>
+
+        <!-- Display PCs -->
+        <h2 class="mt-5">Current PCs</h2>
+        <ul class="list-group">
+            <% pcs.forEach(pc => { %>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>ID: <%= pc.id %></span>
+                    <span>Name: <%= pc.name %></span>
+                    <span>Status: <%= pc.status %></span>
+                </li>
+            <% }); %>
+        </ul>
+
+        <!-- Display Users -->
+        <h2 class="mt-5">Current Users</h2>
+        <ul class="list-group">
+            <% users.forEach(user => { %>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>ID: <%= user.id %></span>
+                    <span>Username: <%= user.username %></span>
+                    <span>Role: <%= user.role %></span>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+</body>
+</html>

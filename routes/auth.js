@@ -4,6 +4,11 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
 
+// redirect to login page
+router.get('/', (req, res) => {
+  res.redirect('/login');
+});
+
 // Registration
 router.get('/register', (req, res) => {
   res.render('register', { error: req.query.error, message: req.query.message });
@@ -48,5 +53,19 @@ router.post('/login', async (req, res) => {
     res.redirect('/login?error=Server error');
   }
 });
+
+
+// Logout
+router.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error(err);
+            return res.redirect('/pcs?error=Could not log out');
+        }
+        res.redirect('/login?message=Successfully logged out');
+    });
+});
+
+
 
 module.exports = router;

@@ -7,6 +7,7 @@ const PC = require('./models/pc');
 const authRoutes = require('./routes/auth');
 const pcsRoutes = require('./routes/pcs');
 const adminRoutes = require('./routes/admin');
+const profileRoutes = require('./routes/profile');
 
 const app = express();
 const port = 3000;
@@ -27,6 +28,7 @@ app.use(session({
 app.use(authRoutes);
 app.use(pcsRoutes);
 app.use(adminRoutes);
+app.use(profileRoutes);
 
 // Sync models and start server
 sequelize.sync().then(() => {
