@@ -1,0 +1,29 @@
+#sidebar {
+    background-color: #f8f9fa;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+#sidebar .nav-link {
+    color: #333;
+    font-size: 16px;
+    padding: 15px 20px;
+}
+
+#sidebar .nav-link:hover {
+    background-color: #e9ecef;
+}
+
+.sidebar-header {
+    padding: 20px;
+    background: #007bff;
+    color: #fff;
+    text-align: center;
+}
+
+.main-content {
+    margin-left: 220px; /* Adjust this value to accommodate the width of your sidebar */
+}

@@ -1,0 +1,10 @@
+{
+    "development": {
+      "username": "Admin",
+      "password": "password",
+      "database": "Pc_booking_site",
+      "host": "127.0.0.1",
+      "dialect": "mysql"
+    }
+  }
+  
