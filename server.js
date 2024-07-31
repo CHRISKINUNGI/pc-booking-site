@@ -8,6 +8,7 @@ const authRoutes = require('./routes/auth');
 const pcsRoutes = require('./routes/pcs');
 const adminRoutes = require('./routes/admin');
 const profileRoutes = require('./routes/profile');
+const path = require('path');
 
 const app = express();
 const port = 3000;
@@ -23,6 +24,9 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }));
+
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 app.use(authRoutes);

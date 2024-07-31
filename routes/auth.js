@@ -1,10 +1,10 @@
-// routes/auth.js
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
+const zxcvbn = require('zxcvbn'); // Import zxcvbn
 const User = require('../models/user');
 
-// redirect to login page
+// Redirect to login page
 router.get('/', (req, res) => {
   res.redirect('/login');
 });
@@ -16,6 +16,17 @@ router.get('/register', (req, res) => {
 
 router.post('/register', async (req, res) => {
   const { username, password, role } = req.body;
+
+  // Validate username length
+  if (username.length < 8) {
+    return res.redirect('/register?error=Username must be at least 8 characters long');
+  }
+
+  // Check password strength using zxcvbn
+  const passwordStrength = zxcvbn(password);
+  if (passwordStrength.score < 3) { // Adjust threshold as needed
+    return res.redirect('/register?error=Password is too weak. Please use a stronger password.');
+  }
 
   try {
     const existingUser = await User.findOne({ where: { username } });
@@ -54,18 +65,15 @@ router.post('/login', async (req, res) => {
   }
 });
 
-
 // Logout
 router.get('/logout', (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            console.error(err);
-            return res.redirect('/pcs?error=Could not log out');
-        }
-        res.redirect('/login?message=Successfully logged out');
-    });
+  req.session.destroy((err) => {
+    if (err) {
+      console.error(err);
+      return res.redirect('/pcs?error=Could not log out');
+    }
+    res.redirect('/login?message=Successfully logged out');
+  });
 });
-
-
 
 module.exports = router;

@@ -5,10 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.min.js"></script> <!-- Include zxcvbn -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            background-image: url('/images/backpage.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+        }
+        .container {
+            max-width: 500px;
+            margin-top: 100px;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+        }
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+        }
+        .eye-icon {
+            cursor: pointer;
+        }
+        .strength-meter {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="text-center mt-5">Register</h1>
+        <h1 class="text-center mb-4">Register</h1>
         <% if (error) { %>
             <div class="alert alert-danger" role="alert">
                 <%= error %>
@@ -22,11 +51,21 @@
         <form action="/register" method="POST">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" class="form-control" required>
+                <input type="text" id="username" name="username" class="form-control" required minlength="8">
+                <small class="form-text text-muted">Username must be at least 8 characters long.</small>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" class="form-control" required>
+                <div class="input-group">
+                    <input type="password" id="password" name="password" class="form-control" required>
+                    <div class="input-group-append">
+                        <span class="input-group-text eye-icon" onclick="togglePassword()">
+                            <i class="fas fa-eye" id="eye-icon"></i>
+                        </span>
+                    </div>
+                </div>
+                <small class="form-text text-muted">Password must be at least 8 characters long and contain both letters and numbers.</small>
+                <div class="strength-meter" id="password-strength"></div>
             </div>
             <div class="form-group">
                 <label for="role">Role</label>
@@ -41,5 +80,34 @@
             <a href="/login">Already have an account? Login here</a>
         </div>
     </div>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script>
+        function togglePassword() {
+            const password = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon');
+            if (password.type === 'password') {
+                password.type = 'text';
+                eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                password.type = 'password';
+                eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            const result = zxcvbn(password);
+            const strengthMeter = document.getElementById('password-strength');
+            const strengthMessages = [
+                "Very Weak",
+                "Weak",
+                "Moderate",
+                "Strong",
+                "Very Strong"
+            ];
+            strengthMeter.textContent = `Password strength: ${strengthMessages[result.score]}`;
+            strengthMeter.className = `strength-meter text-${result.score >= 3 ? 'success' : 'danger'}`;
+        });
+    </script>
 </body>
 </html>
